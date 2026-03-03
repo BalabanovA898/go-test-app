@@ -1,13 +1,18 @@
 package controllers
 
 import (
+	"context"
 	"go-app/db"
+	"go-app/cache"
 	"go-app/models"
 	u "go-app/utils"
 	"encoding/json"
+	"github.com/go-redis/redis/v8"
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
+	log "github.com/sirupsen/logrus"
 	"net/http"
+	"time"
 )
 
 var NoteCreate = func(w http.ResponseWriter, r *http.Request) {
@@ -36,6 +41,20 @@ var NoteRetrieve = func(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	id := params["id"]
 
+	redisClient := cache.GetRedis()
+	cacheKey := cache.NoteKey(id)
+	if redisClient != nil {
+		ctx, cancel := context.WithTimeout(r.Context(), 500*time.Millisecond)
+		defer cancel()
+
+		if cached, err := redisClient.Get(ctx, cacheKey).Bytes(); err == nil {
+			u.RespondJSON(w, cached)
+			return
+		} else if err != redis.Nil {
+			log.Warnf("[REDIS] GET %s failed: %v", cacheKey, err)
+		}
+	}
+
 	db := db.GetDB()
 	err := db.First(&Note, id).Error
 
@@ -54,6 +73,14 @@ var NoteRetrieve = func(w http.ResponseWriter, r *http.Request) {
 	} else if Note.ID == 0 {
 		u.HandleNotFound(w)
 	} else {
+		if redisClient != nil {
+			ctx, cancel := context.WithTimeout(r.Context(), 500*time.Millisecond)
+			defer cancel()
+
+			if err := redisClient.Set(ctx, cacheKey, res, cache.TTL()).Err(); err != nil {
+				log.Warnf("[REDIS] SET %s failed: %v", cacheKey, err)
+			}
+		}
 		u.RespondJSON(w, res)
 	}
 }
@@ -89,6 +116,15 @@ var NoteUpdate = func(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		u.HandleBadRequest(w, err)
 	} else {
+		if redisClient := cache.GetRedis(); redisClient != nil {
+			cacheKey := cache.NoteKey(id)
+			ctx, cancel := context.WithTimeout(r.Context(), 500*time.Millisecond)
+			defer cancel()
+
+			if err := redisClient.Del(ctx, cacheKey).Err(); err != nil {
+				log.Warnf("[REDIS] DEL %s failed: %v", cacheKey, err)
+			}
+		}
 		u.Respond(w, u.Message(true, "OK"))
 	}
 }
@@ -103,6 +139,15 @@ var NoteDelete = func(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		u.HandleBadRequest(w, err)
 	} else {
+		if redisClient := cache.GetRedis(); redisClient != nil {
+			cacheKey := cache.NoteKey(id)
+			ctx, cancel := context.WithTimeout(r.Context(), 500*time.Millisecond)
+			defer cancel()
+
+			if err := redisClient.Del(ctx, cacheKey).Err(); err != nil {
+				log.Warnf("[REDIS] DEL %s failed: %v", cacheKey, err)
+			}
+		}
 		u.Respond(w, u.Message(true, "OK"))
 	}
 }
