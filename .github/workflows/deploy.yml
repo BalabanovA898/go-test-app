@@ -41,12 +41,12 @@ jobs:
             - name: Run Ansible playbook
               uses: dawidd6/action-ansible-playbook@v2
               with:
-                  playbook: ansible/playbooks/full-app-setup.yml
+                  playbook: playbooks/full-app-setup.yml
                   directory: ./ansible
                   key: ${{ secrets.SSH_PRIVATE_KEY }}
                   inventory: |
                       [app]
                       ${{ secrets.SERVER_IP }} ansible_user=andrey
                   options: |
-                      --extra-vars "environment=production"
-                      --vault-password-file vault_pass.txt
+                      --extra-vars "target_host=${{ secrets.SERVER_IP }}"
+                      --vault-password-file ../vault_pass.txt
