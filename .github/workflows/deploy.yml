@@ -43,7 +43,8 @@ jobs:
                   SERVER_IP: ${{ secrets.SERVER_IP }}
                   ANSIBLE_VAULT_PASSWORD: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
               run: |
-                  ansible-playbook -i ansible/inventory/hosts.ini ansible/playbooks/full-app-setup.yml \
+                  ansible-playbook --roles-path ansible/roles \
+                    -i ansible/inventory/hosts.ini ansible/playbooks/full-app-setup.yml \
                     --extra-vars "target_host=${SERVER_IP}" \
                     --vault-password-file vault_pass.txt \
                     -vvv
