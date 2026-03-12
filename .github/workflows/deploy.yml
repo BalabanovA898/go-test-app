@@ -44,7 +44,6 @@ jobs:
                   playbook: playbooks/full-app-setup.yml
                   directory: ./ansible
                   key: ${{ secrets.SSH_PRIVATE_KEY }}
-                  inventory: inventory/hosts.ini
                   options: |
                       --extra-vars "ansible_become_pass=${{ secrets.SUDO_PASSWORD }}"
                       --vault-password-file ./vault_pass.txt
