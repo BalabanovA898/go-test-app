@@ -44,9 +44,7 @@ jobs:
                   playbook: playbooks/full-app-setup.yml
                   directory: ./ansible
                   key: ${{ secrets.SSH_PRIVATE_KEY }}
-                  inventory: |
-                      [app]
-                      ${{ secrets.SERVER_IP }} ansible_user=andrey
+                  inventory: inventory/hosts.ini
                   options: |
                       --extra-vars "target_host=${{ secrets.SERVER_IP }} ansible_become_pass=${{ secrets.SUDO_PASSWORD }}"
                       --vault-password-file ./vault_pass.txt
