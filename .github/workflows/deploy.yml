@@ -39,13 +39,14 @@ jobs:
               run: echo "${ANSIBLE_VAULT_PASSWORD}" > vault_pass.txt
 
             - name: Run Ansible playbook
-              working-directory: ansible
-              env:
-                  SERVER_IP: ${{ secrets.SERVER_IP }}
-                  ANSIBLE_VAULT_PASSWORD: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
-              run: |
-                  ansible-playbook -i inventory/hosts.ini playbooks/full-app-setup.yml \
-                    --extra-vars "target_host=${SERVER_IP}" \
-                    --vault-password-file vault_pass.txt \
-                    -vvv
-              if: success()
+              uses: dawidd6/action-ansible-playbook@v2
+              with:
+                  playbook: ansible/playbooks/full-app-setup.yml
+                  directory: ./
+                  key: ${{ secrets.SSH_PRIVATE_KEY }}
+                  inventory: |
+                      [app]
+                      ${{ secrets.SERVER_IP }} ansible_user=andrey
+                  options: |
+                      --extra-vars "environment=production"
+                      --vault-password-file vault_pass.txt
