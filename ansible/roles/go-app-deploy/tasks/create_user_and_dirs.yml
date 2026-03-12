@@ -1,0 +1,18 @@
+---
+- name: Создание системного пользователя для приложения
+  ansible.builtin.user:
+      name: "{{ go_app_system_user }}"
+      shell: /usr/sbin/nologin
+      create_home: false
+
+- name: Создание директорий приложения
+  ansible.builtin.file:
+      path: "{{ item }}"
+      state: directory
+      owner: "{{ go_app_system_user }}"
+      group: "{{ go_app_system_user }}"
+      mode: "0755"
+  loop:
+      - "{{ go_app_install_dir }}"
+      - "{{ go_app_install_dir }}/src"
+      - "{{ go_app_install_dir }}/.cache/go-build"

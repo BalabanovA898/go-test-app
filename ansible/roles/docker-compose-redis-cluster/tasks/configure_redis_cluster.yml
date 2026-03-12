@@ -1,0 +1,45 @@
+---
+- name: Copy docker-compose.yml to target host
+  ansible.builtin.copy:
+      src: docker-compose.yml
+      dest: /opt/docker-redis/docker-compose.yml
+      owner: root
+      group: root
+      mode: "0644"
+
+- name: Start Redis cluster using Docker Compose
+  community.docker.docker_compose_v2:
+      project_src: /opt/docker-redis
+      state: present # present = up -d
+      files:
+          - docker-compose.yml
+  register: compose_output
+
+- name: Check status of running containers
+  ansible.builtin.shell:
+      cmd: docker compose ps --services --filter "status=running"
+      chdir: /opt/docker-redis
+  register: running_services
+  changed_when: false
+
+- name: Display list of running services
+  ansible.builtin.debug:
+      msg: "Running services: {{ running_services.stdout_lines }}"
+
+- name: Check if the Redis cluster exists
+  ansible.builtin.shell:
+      cmd: >
+          docker run --rm --network docker-redis_redis-cluster redis:7.0
+          redis-cli -h 172.28.0.11 -p 6379 cluster info | grep -q "cluster_state:ok"
+  register: cluster_check
+  ignore_errors: yes
+  changed_when: false
+  # This will return an error if the cluster is not created or not in OK state
+- name: Создать Redis кластер (если не существует)
+  ansible.builtin.shell:
+      cmd: >
+          docker exec redis-master-1
+          redis-cli --cluster create 172.28.0.11:6379 172.28.0.12:6379 172.28.0.13:6379 172.28.0.14:6379 172.28.0.15:6379 172.28.0.16:6379 --cluster-replicas 1 --cluster-yes
+
+  when: cluster_check is failed
+  register: cluster_created

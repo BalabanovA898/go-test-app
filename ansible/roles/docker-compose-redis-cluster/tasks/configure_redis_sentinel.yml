@@ -1,0 +1,16 @@
+---
+- name: Copy docker-compose.yml to target host
+  ansible.builtin.copy:
+      src: docker-compose-sentinel.yml
+      dest: /opt/docker-redis/docker-compose.yml
+      owner: root
+      group: root
+      mode: "0644"
+
+- name: Start Redis sentinel using Docker Compose
+  community.docker.docker_compose_v2:
+      project_src: /opt/docker-redis
+      state: present # present = up -d
+      files:
+          - docker-compose.yml
+  register: compose_output

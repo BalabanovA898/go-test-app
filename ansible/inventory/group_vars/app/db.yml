@@ -1,0 +1,5 @@
+---
+db_name: mydb
+postgresql_app_user: myappuser
+go_app_db_host: 127.0.0.1
+go_app_db_port: 5432

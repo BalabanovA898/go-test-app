@@ -1,0 +1,6 @@
+---
+packages_to_install:
+    - "curl"
+    - "git"
+    - "vim"
+    - "golang"

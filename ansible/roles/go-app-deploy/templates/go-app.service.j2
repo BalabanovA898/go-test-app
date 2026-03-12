@@ -1,0 +1,17 @@
+[Unit]
+Description=Go application {{ go_app_service_name }}
+After=network.target postgresql.service
+
+[Service]
+User={{ go_app_system_user }}
+Group={{ go_app_system_user }}
+WorkingDirectory={{ go_app_install_dir }}
+EnvironmentFile=/etc/{{ go_app_service_name }}.env
+ExecStart={{ go_app_binary_path }}
+
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+

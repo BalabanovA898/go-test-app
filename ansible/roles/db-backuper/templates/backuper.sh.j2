@@ -1,0 +1,15 @@
+#!/bin/bash
+export PGPASSWORD="{{postgres_password}}"
+BACKUP_DIR="/home/andrey/backups/postgres"
+DB_NAME="{{db_name}}"
+DATE=$(date +%Y%m%d_%H%M%S)
+
+mkdir -p $BACKUP_DIR
+pg_dump -U {{postgresql_app_user}} -h {{go_app_db_host}} $DB_NAME | gzip > $BACKUP_DIR/${DB_NAME}_${DATE}.sql.gz
+
+# Удаляем старые бэкапы
+find $BACKUP_DIR -name "*.sql.gz" -mtime +7 -delete
+
+yandex-disk sync
+
+unset PGPASSWORD

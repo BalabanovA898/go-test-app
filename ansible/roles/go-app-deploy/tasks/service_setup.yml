@@ -1,0 +1,26 @@
+---
+- name: Создание файла окружения для приложения
+  ansible.builtin.template:
+      src: app.env.j2
+      dest: "/etc/{{ go_app_service_name }}.env"
+      owner: root
+      group: root
+      mode: "0600"
+
+- name: Создание systemd unit для Go-приложения
+  ansible.builtin.template:
+      src: go-app.service.j2
+      dest: "/etc/systemd/system/{{ go_app_service_name }}.service"
+      owner: root
+      group: root
+      mode: "0644"
+
+- name: Перечитать конфигурацию systemd
+  ansible.builtin.systemd:
+      daemon_reload: true
+
+- name: Включить и запустить сервис Go-приложения
+  ansible.builtin.service:
+      name: "{{ go_app_service_name }}"
+      state: started
+      enabled: true

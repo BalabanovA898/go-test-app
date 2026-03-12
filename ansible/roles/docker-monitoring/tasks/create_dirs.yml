@@ -1,0 +1,11 @@
+---
+- name: Create directories for monitoring stack
+  ansible.builtin.file:
+    path: "/opt/docker-monitoring/{{ item }}"
+    state: directory
+    mode: "0777"
+  loop:
+    - prometheus
+    - grafana
+    - grafana/provisioning
+

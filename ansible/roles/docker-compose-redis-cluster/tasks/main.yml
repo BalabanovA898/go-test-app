@@ -1,0 +1,5 @@
+---
+#- include_tasks: create_dirs.yml
+- include_tasks: create_dirs_sentinel.yml
+#- include_tasks: configure_redis_cluster.yml
+- include_tasks: configure_redis_sentinel.yml

@@ -1,0 +1,15 @@
+---
+- name: Create directories for redis cluster
+  ansible.builtin.file:
+      path: "/opt/docker-redis/data/{{ item }}"
+      state: directory
+      owner: "999" # redis uid
+      group: "999" # redis gid
+      mode: "0700"
+  loop:
+      - master1
+      - master2
+      - master3
+      - slave1
+      - slave2
+      - slave3

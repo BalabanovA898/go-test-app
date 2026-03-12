@@ -1,0 +1,23 @@
+---
+- name: Клонирование репозитория приложения
+  ansible.builtin.git:
+      repo: "{{ go_app_repo_url }}"
+      dest: "{{ go_app_install_dir }}/src"
+      version: "{{ go_app_repo_branch }}"
+      force: true
+  environment:
+      HOME: "{{ go_app_install_dir }}"
+  become: true
+  become_user: "{{ go_app_system_user }}"
+
+- name: Сборка Go-приложения
+  ansible.builtin.command: >
+      go build -o "{{ go_app_binary_path }}" {{ go_app_build_path }}
+  args:
+      chdir: "{{ go_app_install_dir }}/src"
+      creates: "{{ go_app_binary_path }} "
+  environment:
+      HOME: "{{ go_app_install_dir }}"
+      GOCACHE: "{{ go_app_install_dir }}/.cache/go-build"
+  become: true
+  become_user: "{{ go_app_system_user }}"

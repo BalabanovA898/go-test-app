@@ -1,0 +1,22 @@
+---
+- name: Create directory for backuper
+  ansible.builtin.file:
+      path: "/opt/backuper"
+      state: directory
+      mode: "0777"
+
+- name: Create backuper sh script
+  ansible.builtin.template:
+      src: backuper.sh.j2
+      dest: "/opt/backuper/backuper.sh"
+      owner: root
+      group: root
+      mode: "0777"
+
+- name: Add scheduled job for regular database backup
+  ansible.builtin.cron:
+      name: "backup db"
+      minute: "0"
+      hour: "0"
+      job: "/opt/backuper/backuper.sh"
+      user: root

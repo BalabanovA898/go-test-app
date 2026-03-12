@@ -1,0 +1,25 @@
+---
+- name: Copy docker-compose.yml to target host
+  ansible.builtin.copy:
+    src: docker-compose.yml
+    dest: /opt/docker-monitoring/docker-compose.yml
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Copy prometheus.yml to target host
+  ansible.builtin.copy:
+    src: prometheus.yml
+    dest: /opt/docker-monitoring/prometheus/prometheus.yml
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Start monitoring stack using Docker Compose
+  community.docker.docker_compose_v2:
+    project_src: /opt/docker-monitoring
+    state: present # present = up -d
+    files:
+      - docker-compose.yml
+  register: compose_output
+
