@@ -4,11 +4,11 @@
   become: true
 
   roles:
-      #- apt-install-packages
-      #- ansible-role-postgresql
-      #- get-docker
-      #- docker-compose-redis-cluster
-      #- docker-monitoring
-      #- go-app-deploy
+      - apt-install-packages
+      - ansible-role-postgresql
+      - get-docker
+      - docker-compose-redis-cluster
+      - docker-monitoring
+      - go-app-deploy
       - yandex-disk
       - db-backuper
