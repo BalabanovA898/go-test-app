@@ -36,7 +36,7 @@ jobs:
             - name: Create vault password file
               env:
                   ANSIBLE_VAULT_PASSWORD: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
-              run: echo "${ANSIBLE_VAULT_PASSWORD}" > vault_pass.txt
+              run: echo "${ANSIBLE_VAULT_PASSWORD}" > ./ansible/vault_pass.txt
 
             - name: Run Ansible playbook
               uses: dawidd6/action-ansible-playbook@v2
@@ -48,5 +48,5 @@ jobs:
                       [app]
                       ${{ secrets.SERVER_IP }} ansible_user=andrey
                   options: |
-                      --extra-vars "target_host=${{ secrets.SERVER_IP }}"
-                      --vault-password-file ../vault_pass.txt
+                      --extra-vars "target_host=${{ secrets.SERVER_IP }} ansible_become_pass=${{ secrets.SUDO_PASSWORD }}"
+                      --vault-password-file ./vault_pass.txt
