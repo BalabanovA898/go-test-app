@@ -9,30 +9,30 @@ jobs:
         runs-on: self-hosted
 
         steps:
-            - name: Checkout code
-              uses: actions/checkout@v3
-
-            - name: Setup Python
-              uses: actions/setup-python@v4
-              with:
-                  python-version: "3.10"
-
-            - name: Install Ansible
-              run: |
-                  pip install ansible
-                  # Если нужны коллекции
-                  ansible-galaxy collection install community.docker
-
-            - name: Setup SSH key
-              env:
-                  SERVER_IP: ${{ secrets.SERVER_IP }}
-                  SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-              run: |
-                  mkdir -p ~/.ssh
-                  echo "${SSH_PRIVATE_KEY}" > ~/.ssh/id_rsa
-                  chmod 600 ~/.ssh/id_rsa
-                  ssh-keyscan -H $SERVER_IP >> ~/.ssh/known_hosts
-
+            #- name: Checkout code
+            #  uses: actions/checkout@v3
+            #
+            #- name: Setup Python
+            #  uses: actions/setup-python@v4
+            #  with:
+            #      python-version: "3.10"
+            #
+            #- name: Install Ansible
+            #  run: |
+            #      pip install ansible
+            #      # Если нужны коллекции
+            #      ansible-galaxy collection install community.docker
+            #
+            #- name: Setup SSH key
+            #  env:
+            #      SERVER_IP: ${{ secrets.SERVER_IP }}
+            #      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+            #  run: |
+            #      mkdir -p ~/.ssh
+            #      echo "${SSH_PRIVATE_KEY}" > ~/.ssh/id_rsa
+            #      chmod 600 ~/.ssh/id_rsa
+            #      ssh-keyscan -H $SERVER_IP >> ~/.ssh/known_hosts
+            #
             - name: Create vault password file
               env:
                   ANSIBLE_VAULT_PASSWORD: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
