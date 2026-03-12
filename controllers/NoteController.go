@@ -48,6 +48,7 @@ var NoteRetrieve = func(w http.ResponseWriter, r *http.Request) {
 		defer cancel()
 
 		if cached, err := redisClient.Get(ctx, cacheKey).Bytes(); err == nil {
+			log.Infof("[REDIS] GET %s: %s", cacheKey, string(cached))
 			u.RespondJSON(w, cached)
 			return
 		} else if err != redis.Nil {

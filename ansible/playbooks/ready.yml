@@ -1,0 +1,9 @@
+---
+- name: Установка приложения и postgress
+  hosts: app
+  become: true
+
+  roles:
+      - docker-compose-redis-cluster
+      - docker-monitoring
+      - go-app-deploy
