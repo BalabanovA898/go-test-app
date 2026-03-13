@@ -20,7 +20,6 @@ jobs:
             #- name: Install Ansible
             #  run: |
             #      pip install ansible
-            #      # Если нужны коллекции
             #      ansible-galaxy collection install community.docker
             #
             #- name: Setup SSH key
