@@ -1,0 +1,7 @@
+---
+- name: Update application and PostgreSQL
+  hosts: app
+  become: true
+
+  roles:
+      - go-app-deploy

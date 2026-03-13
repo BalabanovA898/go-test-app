@@ -5,6 +5,7 @@ services:
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
       - REDIS_REPLICATION_MODE=master
+
     ports:
       - "6379:6379"
     volumes:
@@ -23,6 +24,7 @@ services:
       - REDIS_REPLICATION_MODE=slave
       - REDIS_MASTER_HOST=redis-master
       - REDIS_MASTER_PORT_NUMBER=6379
+      - REDIS_RDB_POLICY="save 900 1 save 300 10 save 60 10000"
     ports:
       - "6380:6379"
     volumes:
@@ -44,6 +46,7 @@ services:
       - REDIS_SENTINEL_QUORUM=2
       - REDIS_SENTINEL_DOWN_AFTER_MILLISECONDS=5000
       - REDIS_SENTINEL_FAILOVER_TIMEOUT=10000
+      - REDIS_RDB_POLICY="save 900 1 save 300 10 save 60 10000"
     ports:
       - "26379:26379"
     networks:

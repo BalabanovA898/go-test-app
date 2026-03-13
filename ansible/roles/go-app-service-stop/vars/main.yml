@@ -1,0 +1,18 @@
+---
+# Пользователь и директория для приложения
+go_app_system_user: appuser
+go_app_service_name: server
+go_app_install_dir: "/opt/{{ go_app_service_name }}"
+
+# Репозиторий и сборка
+go_app_repo_url: "https://github.com/BalabanovA898/go-test-app" # ЗАМЕНИ на свой репозиторий
+go_app_repo_branch: "master"
+go_app_build_path: "." # например, "./cmd/myapp", если у тебя бинарь в подкаталоге
+
+# Путь к бинарю
+go_app_binary_path: "{{ go_app_install_dir }}/{{ go_app_service_name }}"
+
+# Логирование
+go_app_log_path: "/var/logs/{{go_app_service_name}}"
+go_app_stdout_path: "{{go_app_log_path}}/server_stdout.log"
+go_app_stderr_path: "{{go_app_log_path}}/server_stderr.log"

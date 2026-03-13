@@ -1,0 +1,6 @@
+---
+- name: Stop monitoring stack using Docker Compose
+  community.docker.docker_compose_v2:
+      project_src: /opt/docker-monitoring
+      state: absent # absent = down
+  register: compose_output

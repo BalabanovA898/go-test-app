@@ -1,0 +1,2 @@
+---
+- include_tasks: start_redis_sentinel.yml

@@ -1,0 +1,6 @@
+---
+- name: Start Go-application service
+  ansible.builtin.service:
+      name: "{{ go_app_service_name }}"
+      state: started
+      enabled: true

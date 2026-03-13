@@ -16,3 +16,4 @@
       - "{{ go_app_install_dir }}"
       - "{{ go_app_install_dir }}/src"
       - "{{ go_app_install_dir }}/.cache/go-build"
+      - "/var/log/{{ go_app_service_name }}"

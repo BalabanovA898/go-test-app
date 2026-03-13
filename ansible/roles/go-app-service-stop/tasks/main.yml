@@ -1,0 +1,2 @@
+---
+- include_tasks: stop_service.yml

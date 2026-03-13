@@ -1,5 +1,5 @@
 ---
-- name: Создание файла окружения для приложения
+- name: Create environment file for the application
   ansible.builtin.template:
       src: app.env.j2
       dest: "/etc/{{ go_app_service_name }}.env"
@@ -7,7 +7,7 @@
       group: root
       mode: "0600"
 
-- name: Создание systemd unit для Go-приложения
+- name: Create systemd unit for Go application
   ansible.builtin.template:
       src: go-app.service.j2
       dest: "/etc/systemd/system/{{ go_app_service_name }}.service"
@@ -15,11 +15,19 @@
       group: root
       mode: "0644"
 
-- name: Перечитать конфигурацию systemd
+- name: Create logrotated unit for Go application
+  ansible.builtin.template:
+      src: go-app-logrotate.j2
+      dest: "/etc/logrotate.d/{{ go_app_service_name }}"
+      owner: root
+      group: root
+      mode: "0644"
+
+- name: Reload systemd configuration
   ansible.builtin.systemd:
       daemon_reload: true
 
-- name: Включить и запустить сервис Go-приложения
+- name: Enable and start Go application service
   ansible.builtin.service:
       name: "{{ go_app_service_name }}"
       state: started

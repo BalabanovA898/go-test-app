@@ -1,0 +1,12 @@
+/var/log/{{go_app_service_name}}/*.log {
+    daily
+    missingok
+    rotate 30
+    compress
+    notifempty
+    create 0755 {{go_app_system_user}} {{go_app_system_user}}
+    sharedscripts
+    postrotate
+        systemctl reload {{go_app_service_name}}.service > /dev/null 2>&1 || true
+    endscript
+}

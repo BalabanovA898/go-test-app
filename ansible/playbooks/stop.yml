@@ -1,0 +1,10 @@
+---
+- name: Установка приложения и postgress
+  hosts: app
+  become: true
+
+  roles:
+      - docker-compose-redis-sentinel-stop
+      - docker-monitoring-stop
+      - go-app-service-stop
+      - postgres-stop
