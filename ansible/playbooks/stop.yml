@@ -1,5 +1,5 @@
 ---
-- name: Установка приложения и postgress
+- name: Stop the app
   hosts: app
   become: true
 

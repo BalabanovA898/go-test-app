@@ -1,5 +1,5 @@
 ---
-- name: Установка приложения и postgress
+- name: Setting up
   hosts: app
   become: true
 

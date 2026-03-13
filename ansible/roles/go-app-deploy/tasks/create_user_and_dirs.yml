@@ -1,11 +1,11 @@
 ---
-- name: Создание системного пользователя для приложения
+- name: Create system user for the app
   ansible.builtin.user:
       name: "{{ go_app_system_user }}"
       shell: /usr/sbin/nologin
       create_home: false
 
-- name: Создание директорий приложения
+- name: Craete directoies for the app
   ansible.builtin.file:
       path: "{{ item }}"
       state: directory

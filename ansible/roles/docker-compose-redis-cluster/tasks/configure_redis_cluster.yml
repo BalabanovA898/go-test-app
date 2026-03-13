@@ -34,8 +34,8 @@
   register: cluster_check
   ignore_errors: yes
   changed_when: false
-  # This will return an error if the cluster is not created or not in OK state
-- name: Создать Redis кластер (если не существует)
+
+- name: Create redis cluster if does not exist
   ansible.builtin.shell:
       cmd: >
           docker exec redis-master-1

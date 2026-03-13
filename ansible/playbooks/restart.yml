@@ -1,5 +1,14 @@
 ---
-- docker-compose-redis-sentinel-stop
-- docker-monitoring-stop
-- go-app-service-stop
-- postgres-stop
+- name: Restart
+  hosts: app
+  become: true
+
+  roles:
+      - go-app-service-stop
+      - docker-monitoring-stop
+      - docker-compose-redis-sentinel-stop
+      - postgres-stop
+      - postgres-start
+      - docker-compose-redis-sentinel-start
+      - docker-monitoring-start
+      - go-app-service-start

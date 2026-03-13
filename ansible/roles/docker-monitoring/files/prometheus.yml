@@ -8,5 +8,4 @@ scrape_configs:
           - targets: ["localhost:9090"]
     - job_name: "redis"
       static_configs:
-          - targets: ["localhost:9121"]
-
+          - targets: ["10.10.222.69:9121"] #HOST_IP

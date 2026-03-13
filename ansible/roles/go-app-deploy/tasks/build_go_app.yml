@@ -1,5 +1,5 @@
 ---
-- name: Клонирование репозитория приложения
+- name: Clone app repo
   ansible.builtin.git:
       repo: "{{ go_app_repo_url }}"
       dest: "{{ go_app_install_dir }}/src"
@@ -10,7 +10,7 @@
   become: true
   become_user: "{{ go_app_system_user }}"
 
-- name: Сборка Go-приложения
+- name: Build go app
   ansible.builtin.command: >
       go build -o "{{ go_app_binary_path }}" {{ go_app_build_path }}
   args:
